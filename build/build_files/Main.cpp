@@ -47,22 +47,14 @@ int main()
 {
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
+    SetTargetFPS(60);
+
     while (!WindowShouldClose())
     {
-        SetTargetFPS(60);
-
-        while (!WindowShouldClose())
-        {
-            UpdateDrawFrame();
-        }
-
-        UnloadGame();
-
-        CloseWindow();
-
-        return 0;
+        UpdateDrawFrame();    
     }
 
+    UnloadGame();
     CloseWindow();
 
     return 0;
@@ -73,17 +65,34 @@ void InitGame()
     gameOver = false;
     pause = false;
     victory = false;
+}
 
-    Vector2 posVector;
-    posVector.x = 400;
-    posVector.y = 225;
+void UpdateGame(void)
+{
 
-    Player(posVector, RED);
+}
+
+void DrawGame(void)
+{
+    BeginDrawing();
+
+    ClearBackground(RAYWHITE);
+
+    if (!gameOver)
+    {
+        
+    }
 }
 
 
+void UpdateDrawFrame(void)
+{
+    UpdateGame();
+    DrawGame();
+}
 
-static void UpdateDrawFrame(void)
+
+void UnloadGame(void)
 {
 
 }
