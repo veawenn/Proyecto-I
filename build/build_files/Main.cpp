@@ -24,16 +24,18 @@ private:
 public:
     Player();
 
-    Player(Vector2 posVector, Color color)
+    Player(int playerHp, Vector2 posVector, Color color)
     {
         position = posVector;
         this->color = color;
+        this->playerHp = playerHp;
+
     }
 
     Vector2 getPos()
     {
         return position;
-    }
+    }       
 
     void updatePos(float speedX, float speedY)
     {
