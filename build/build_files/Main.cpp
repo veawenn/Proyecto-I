@@ -70,7 +70,7 @@ int main()
 
     Vector2 initPos = { screenWidth / 2, screenHeight / 2 };
 
-    Player player(initPos, RED);
+    Player player(50, initPos, RED);
 
     while (!WindowShouldClose())
     {       
