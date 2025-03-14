@@ -4,6 +4,8 @@
 
 #include <math.h>   
 
+#include <vector>   
+
 #include <iostream>"
 using namespace std;
 
@@ -40,8 +42,8 @@ public:
     }
 };
 
-static const int screenWidth = 1920;
-static const int screenHeight = 1080;
+static const float screenWidth = 800;
+static const float screenHeight = 450;
 
 static bool gameOver = false;
 static bool pause = false;
@@ -50,6 +52,7 @@ static bool victory = false;
 static void InitGame(void);         // Initialize game
 static void UpdateGame(Player* player);       // Update game (one frame)
 static void DrawGame(Player* player);         // Draw game (one frame)
+static void DrawMap(void);
 static void UnloadGame(void);       // Unload game
 static void UpdateDrawFrame(Player* player);  // Update and Draw (one frame)
 
@@ -60,6 +63,8 @@ int main()
     SetTargetFPS(60);
 
     InitWindow(screenWidth, screenHeight, "Base");
+
+    InitGame();
 
     Vector2 initPos = { screenWidth / 2, screenHeight / 2 };
 
@@ -113,7 +118,17 @@ void DrawGame(Player* player)
 {
     BeginDrawing();
 
-    ClearBackground(BLACK);
+    DrawMap();
+
+    /*
+    Image bgImage = LoadImage("Bomberman Sprites/General Sprites/Playfield_Sprite.png");
+    ImageResize(&bgImage, 992, 416);
+    Texture2D bgText = LoadTextureFromImage(bgImage);
+    UnloadImage(bgImage);
+
+    DrawTexture(bgText, 0, 50, WHITE);
+    */
+    ClearBackground(BLACK);   
 
     Vector2 playersize = { 50, 50 };
 
@@ -131,6 +146,31 @@ void UpdateDrawFrame(Player* player)
 {
     DrawGame(player);
     UpdateGame(player);    
+}
+
+void DrawMap()
+{
+    int mapSetter[31][13];
+
+    Vector2 cellSize = { 50,50 };
+ 
+    for (int i = 0; i < 31; i++)
+    {
+        for (int j = 0; j < 13; j++)
+        {
+            if (i == 0 || j == 0)
+            {
+                Vector2 tempPos = { 0, 0 };
+                DrawRectangleV(tempPos, cellSize, WHITE);
+            }
+
+            if ((i % 2 == 0) && (j % 2 == 0))
+            {
+                Vector2 tempPos = { i * 50, j * 50 };
+                DrawRectangleV(tempPos, cellSize, WHITE);
+            }
+        }
+    }
 }
 
 
