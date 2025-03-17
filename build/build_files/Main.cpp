@@ -58,6 +58,8 @@ static void DrawMap(void);
 static void UnloadGame(void);       // Unload game
 static void UpdateDrawFrame(Player* player);  // Update and Draw (one frame)
 
+void UpdateCameraCenterInsideMap(Camera2D* camera, Player* player, int width, int height);
+
 int main()
 {
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
@@ -72,9 +74,14 @@ int main()
 
     Player player(50, initPos, RED);
 
+    Camera2D camera = { 0 };
+    camera.target = player.getPos();
+
     while (!WindowShouldClose())
-    {       
-        UpdateDrawFrame(&player);    
+    {   
+        UpdateDrawFrame(&player);  
+
+        UpdateCameraCenterInsideMap(&camera, &player, screenWidth, screenHeight);
     }
 
     //UnloadGame();
@@ -132,7 +139,7 @@ void DrawGame(Player* player)
     */
     ClearBackground(BLACK);   
 
-    Vector2 playersize = { 50, 50 };
+    Vector2 playersize = { 30, 30 };
 
     DrawRectangleV(player->getPos(), playersize, RED);
 
@@ -162,7 +169,7 @@ void DrawMap()
         {
             if (i == 0 || j == 0)
             {
-                Vector2 tempPos = { 0, 0 };
+                Vector2 tempPos = { i * 50, j * 50 };
                 DrawRectangleV(tempPos, cellSize, WHITE);
             }
 
@@ -173,6 +180,24 @@ void DrawMap()
             }
         }
     }
+}
+
+void UpdateCameraCenterInsideMap(Camera2D* camera, Player* player, int width, int height)
+{
+    camera->target = player->getPos();
+
+    camera->offset.x = width / 2.0f;
+    camera->offset.y = height / 2.0f;
+
+    Vector2 max = { width, height };
+    GetWorldToScreen2D(max, *camera);
+    Vector2 min = { 0, 0 };
+    GetWorldToScreen2D(min, *camera);
+
+    if (max.x < width) camera->offset.x = width - (max.x - width / 2);
+    if (max.y < height) camera->offset.y = height - (max.y - height / 2);
+    if (min.x > 0) camera->offset.x = width / 2 - min.x;
+    if (min.y > 0) camera->offset.y = height / 2 - min.y;
 }
 
 
